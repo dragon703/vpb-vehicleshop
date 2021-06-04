@@ -12,7 +12,7 @@ Citizen.CreateThread(function()
 	if Config.PlateUseSpace then char = char + 1 end
 
 	if char > 8 then
-		print(('[esx_vehicleshop] [^3WARNING^7] Plate character count reached, %s/8 characters!'):format(char))
+		print(('[vpb-vehicleshop] [^3WARNING^7] Plate character count reached, %s/8 characters!'):format(char))
 	end
 end)
 
@@ -52,8 +52,8 @@ function GetVehiclesAndCategories(categories, vehicles)
 	end
 
 	-- send information after db has loaded, making sure everyone gets vehicle information
-	TriggerClientEvent('esx_vehicleshop:sendCategories', -1, categories)
-	TriggerClientEvent('esx_vehicleshop:sendVehicles', -1, vehicles)
+	TriggerClientEvent('vpb-vehicleshop:sendCategories', -1, categories)
+	TriggerClientEvent('vpb-vehicleshop:sendVehicles', -1, vehicles)
 end
 
 function getVehicleLabelFromModel(model)
@@ -66,8 +66,8 @@ function getVehicleLabelFromModel(model)
 	return
 end
 
-RegisterNetEvent('esx_vehicleshop:setVehicleOwnedPlayerId')
-AddEventHandler('esx_vehicleshop:setVehicleOwnedPlayerId', function(playerId, vehicleProps, model, label)
+RegisterNetEvent('vpb-vehicleshop:setVehicleOwnedPlayerId')
+AddEventHandler('vpb-vehicleshop:setVehicleOwnedPlayerId', function(playerId, vehicleProps, model, label)
 	local xPlayer, xTarget = ESX.GetPlayerFromId(source), ESX.GetPlayerFromId(playerId)
 
 	if xPlayer.job.name == 'cardealer' and xTarget then
@@ -106,14 +106,14 @@ AddEventHandler('esx_vehicleshop:setVehicleOwnedPlayerId', function(playerId, ve
 	end
 end)
 
-ESX.RegisterServerCallback('esx_vehicleshop:getSoldVehicles', function(source, cb)
+ESX.RegisterServerCallback('vpb-vehicleshop:getSoldVehicles', function(source, cb)
 	MySQL.Async.fetchAll('SELECT client, model, plate, soldby, date FROM vehicle_sold', {}, function(result)
 		cb(result)
 	end)
 end)
 
-RegisterNetEvent('esx_vehicleshop:rentVehicle')
-AddEventHandler('esx_vehicleshop:rentVehicle', function(vehicle, plate, rentPrice, playerId)
+RegisterNetEvent('vpb-vehicleshop:rentVehicle')
+AddEventHandler('vpb-vehicleshop:rentVehicle', function(vehicle, plate, rentPrice, playerId)
 	local xPlayer, xTarget = ESX.GetPlayerFromId(source), ESX.GetPlayerFromId(playerId)
 
 	if xPlayer.job.name == 'cardealer' and xTarget then
@@ -144,8 +144,8 @@ AddEventHandler('esx_vehicleshop:rentVehicle', function(vehicle, plate, rentPric
 	end
 end)
 
-RegisterNetEvent('esx_vehicleshop:getStockItem')
-AddEventHandler('esx_vehicleshop:getStockItem', function(itemName, count)
+RegisterNetEvent('vpb-vehicleshop:getStockItem')
+AddEventHandler('vpb-vehicleshop:getStockItem', function(itemName, count)
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
 
@@ -169,8 +169,8 @@ AddEventHandler('esx_vehicleshop:getStockItem', function(itemName, count)
 	end)
 end)
 
-RegisterNetEvent('esx_vehicleshop:putStockItems')
-AddEventHandler('esx_vehicleshop:putStockItems', function(itemName, count)
+RegisterNetEvent('vpb-vehicleshop:putStockItems')
+AddEventHandler('vpb-vehicleshop:putStockItems', function(itemName, count)
 	local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
 
@@ -187,15 +187,15 @@ AddEventHandler('esx_vehicleshop:putStockItems', function(itemName, count)
 	end)
 end)
 
-ESX.RegisterServerCallback('esx_vehicleshop:getCategories', function(source, cb)
+ESX.RegisterServerCallback('vpb-vehicleshop:getCategories', function(source, cb)
 	cb(categories)
 end)
 
-ESX.RegisterServerCallback('esx_vehicleshop:getVehicles', function(source, cb)
+ESX.RegisterServerCallback('vpb-vehicleshop:getVehicles', function(source, cb)
 	cb(vehicles)
 end)
 
-ESX.RegisterServerCallback('esx_vehicleshop:buyVehicle', function(source, cb, model, plate)
+ESX.RegisterServerCallback('vpb-vehicleshop:buyVehicle', function(source, cb, model, plate)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local modelPrice
 
@@ -222,13 +222,13 @@ ESX.RegisterServerCallback('esx_vehicleshop:buyVehicle', function(source, cb, mo
 	end
 end)
 
-ESX.RegisterServerCallback('esx_vehicleshop:getCommercialVehicles', function(source, cb)
+ESX.RegisterServerCallback('vpb-vehicleshop:getCommercialVehicles', function(source, cb)
 	MySQL.Async.fetchAll('SELECT price, vehicle FROM cardealer_vehicles ORDER BY vehicle ASC', {}, function(result)
 		cb(result)
 	end)
 end)
 
-ESX.RegisterServerCallback('esx_vehicleshop:buyCarDealerVehicle', function(source, cb, model)
+ESX.RegisterServerCallback('vpb-vehicleshop:buyCarDealerVehicle', function(source, cb, model)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
 	if xPlayer.job.name == 'cardealer' then
@@ -260,8 +260,8 @@ ESX.RegisterServerCallback('esx_vehicleshop:buyCarDealerVehicle', function(sourc
 	end
 end)
 
-RegisterNetEvent('esx_vehicleshop:returnProvider')
-AddEventHandler('esx_vehicleshop:returnProvider', function(vehicleModel)
+RegisterNetEvent('vpb-vehicleshop:returnProvider')
+AddEventHandler('vpb-vehicleshop:returnProvider', function(vehicleModel)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
 	if xPlayer.job.name == 'cardealer' then
@@ -285,13 +285,13 @@ AddEventHandler('esx_vehicleshop:returnProvider', function(vehicleModel)
 					end
 				end)
 			else
-				print(('[esx_vehicleshop] [^3WARNING^7] %s attempted selling an invalid vehicle!'):format(xPlayer.identifier))
+				print(('[vpb-vehicleshop] [^3WARNING^7] %s attempted selling an invalid vehicle!'):format(xPlayer.identifier))
 			end
 		end)
 	end
 end)
 
-ESX.RegisterServerCallback('esx_vehicleshop:getRentedVehicles', function(source, cb)
+ESX.RegisterServerCallback('vpb-vehicleshop:getRentedVehicles', function(source, cb)
 	MySQL.Async.fetchAll('SELECT * FROM rented_vehicles ORDER BY player_name ASC', {}, function(result)
 		local vehicles = {}
 
@@ -307,7 +307,7 @@ ESX.RegisterServerCallback('esx_vehicleshop:getRentedVehicles', function(source,
 	end)
 end)
 
-ESX.RegisterServerCallback('esx_vehicleshop:giveBackVehicle', function(source, cb, plate)
+ESX.RegisterServerCallback('vpb-vehicleshop:giveBackVehicle', function(source, cb, plate)
 	MySQL.Async.fetchAll('SELECT base_price, vehicle FROM rented_vehicles WHERE plate = @plate', {
 		['@plate'] = plate
 	}, function(result)
@@ -332,7 +332,7 @@ ESX.RegisterServerCallback('esx_vehicleshop:giveBackVehicle', function(source, c
 	end)
 end)
 
-ESX.RegisterServerCallback('esx_vehicleshop:resellVehicle', function(source, cb, plate, model)
+ESX.RegisterServerCallback('vpb-vehicleshop:resellVehicle', function(source, cb, plate, model)
 	local xPlayer, resellPrice = ESX.GetPlayerFromId(source)
 
 	if xPlayer.job.name == 'cardealer' or not Config.EnablePlayerManagement then
@@ -345,7 +345,7 @@ ESX.RegisterServerCallback('esx_vehicleshop:resellVehicle', function(source, cb,
 		end
 
 		if not resellPrice then
-			print(('[esx_vehicleshop] [^3WARNING^7] %s attempted to sell an unknown vehicle!'):format(xPlayer.identifier))
+			print(('[vpb-vehicleshop] [^3WARNING^7] %s attempted to sell an unknown vehicle!'):format(xPlayer.identifier))
 			cb(false)
 		else
 			MySQL.Async.fetchAll('SELECT * FROM rented_vehicles WHERE plate = @plate', {
@@ -367,11 +367,11 @@ ESX.RegisterServerCallback('esx_vehicleshop:resellVehicle', function(source, cb,
 									RemoveOwnedVehicle(plate)
 									cb(true)
 								else
-									print(('[esx_vehicleshop] [^3WARNING^7] %s attempted to sell an vehicle with plate mismatch!'):format(xPlayer.identifier))
+									print(('[vpb-vehicleshop] [^3WARNING^7] %s attempted to sell an vehicle with plate mismatch!'):format(xPlayer.identifier))
 									cb(false)
 								end
 							else
-								print(('[esx_vehicleshop] [^3WARNING^7] %s attempted to sell an vehicle with model mismatch!'):format(xPlayer.identifier))
+								print(('[vpb-vehicleshop] [^3WARNING^7] %s attempted to sell an vehicle with model mismatch!'):format(xPlayer.identifier))
 								cb(false)
 							end
 						end
@@ -382,20 +382,20 @@ ESX.RegisterServerCallback('esx_vehicleshop:resellVehicle', function(source, cb,
 	end
 end)
 
-ESX.RegisterServerCallback('esx_vehicleshop:getStockItems', function(source, cb)
+ESX.RegisterServerCallback('vpb-vehicleshop:getStockItems', function(source, cb)
 	TriggerEvent('esx_addoninventory:getSharedInventory', 'society_cardealer', function(inventory)
 		cb(inventory.items)
 	end)
 end)
 
-ESX.RegisterServerCallback('esx_vehicleshop:getPlayerInventory', function(source, cb)
+ESX.RegisterServerCallback('vpb-vehicleshop:getPlayerInventory', function(source, cb)
 	local xPlayer = ESX.GetPlayerFromId(source)
 	local items = xPlayer.inventory
 
 	cb({items = items})
 end)
 
-ESX.RegisterServerCallback('esx_vehicleshop:isPlateTaken', function(source, cb, plate)
+ESX.RegisterServerCallback('vpb-vehicleshop:isPlateTaken', function(source, cb, plate)
 	MySQL.Async.fetchAll('SELECT 1 FROM owned_vehicles WHERE plate = @plate', {
 		['@plate'] = plate
 	}, function(result)
@@ -403,7 +403,7 @@ ESX.RegisterServerCallback('esx_vehicleshop:isPlateTaken', function(source, cb, 
 	end)
 end)
 
-ESX.RegisterServerCallback('esx_vehicleshop:retrieveJobVehicles', function(source, cb, type)
+ESX.RegisterServerCallback('vpb-vehicleshop:retrieveJobVehicles', function(source, cb, type)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
 	MySQL.Async.fetchAll('SELECT * FROM owned_vehicles WHERE owner = @owner AND type = @type AND job = @job', {
@@ -415,8 +415,8 @@ ESX.RegisterServerCallback('esx_vehicleshop:retrieveJobVehicles', function(sourc
 	end)
 end)
 
-RegisterNetEvent('esx_vehicleshop:setJobVehicleState')
-AddEventHandler('esx_vehicleshop:setJobVehicleState', function(plate, state)
+RegisterNetEvent('vpb-vehicleshop:setJobVehicleState')
+AddEventHandler('vpb-vehicleshop:setJobVehicleState', function(plate, state)
 	local xPlayer = ESX.GetPlayerFromId(source)
 
 	MySQL.Async.execute('UPDATE owned_vehicles SET `stored` = @stored WHERE plate = @plate AND job = @job', {
@@ -425,7 +425,7 @@ AddEventHandler('esx_vehicleshop:setJobVehicleState', function(plate, state)
 		['@job'] = xPlayer.job.name
 	}, function(rowsChanged)
 		if rowsChanged == 0 then
-			print(('[esx_vehicleshop] [^3WARNING^7] %s exploited the garage!'):format(xPlayer.identifier))
+			print(('[vpb-vehicleshop] [^3WARNING^7] %s exploited the garage!'):format(xPlayer.identifier))
 		end
 	end)
 end)
@@ -439,7 +439,7 @@ end
 
 function PayRent(d, h, m)
 	local tasks, timeStart = {}, os.clock()
-	print('[esx_vehicleshop] [^2INFO^7] Paying rent cron job started')
+	print('[vpb-vehicleshop] [^2INFO^7] Paying rent cron job started')
 
 	MySQL.Async.fetchAll('SELECT owner, rent_price, plate FROM rented_vehicles', {}, function(result)
 		for k,v in ipairs(result) do
@@ -488,7 +488,7 @@ function PayRent(d, h, m)
 		Async.parallelLimit(tasks, 5, function(results) end)
 
 		local elapsedTime = os.clock() - timeStart
-		print(('[esx_vehicleshop] [^2INFO^7] Paying rent cron job took %s seconds'):format(elapsedTime))
+		print(('[vpb-vehicleshop] [^2INFO^7] Paying rent cron job took %s seconds'):format(elapsedTime))
 	end)
 end
 

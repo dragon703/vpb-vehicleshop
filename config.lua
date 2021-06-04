@@ -52,6 +52,41 @@ Config.Zones = {
 		Pos   = vector3(-44.6, -1080.7, 25.6),
 		Size  = {x = 3.0, y = 3.0, z = 1.0},
 		Type  = 1
+	},
+	
+	DisplayVehicle1 = {
+		Pos		= vector3(0.0, 0.0, 0.0),
+		Heading	= 0.0
+	},
+	
+	DisplayVehicle2 = {
+		Pos		= vector3(0.0, 0.0, 0.0),
+		Heading	= 0.0
+	},
+	
+	DisplayVehicle3 = {
+		Pos		= vector3(0.0, 0.0, 0.0),
+		Heading	= 0.0
+	},
+	
+	DisplayVehicle4 = {
+		Pos		= vector3(0.0, 0.0, 0.0),
+		Heading	= 0.0
+	},
+	
+	DisplayVehicle5 = {
+		Pos		= vector3(0.0, 0.0, 0.0),
+		Heading	= 0.0
+	},
+	
+	DisplayVehicle6 = {
+		Pos		= vector3(0.0, 0.0, 0.0),
+		Heading	= 0.0
+	},
+	
+	DisplayTruck = {
+		Pos		= vector3(0.0, 0.0, 0.0),
+		Heading	= 0.0
 	}
 
 }

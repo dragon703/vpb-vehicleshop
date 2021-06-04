@@ -1,5 +1,5 @@
 local HasAlreadyEnteredMarker, IsInShopMenu = false, false
-local CurrentAction, CurrentActionMsg, LastZone, currentDisplayVehicle, CurrentVehicleData
+local CurrentAction, CurrentActionMsg, LastZone, currentDisplayVehicle, CurrentVehicleData, dispveh1, dispveh2, dispveh3, dispveh4, dispveh5, dispveh6, disptruck
 local CurrentActionData, Vehicles, Categories = {}, {}, {}
 
 ESX = nil
@@ -24,11 +24,11 @@ function getVehicleLabelFromModel(model)
 end
 
 function getVehicles()
-	ESX.TriggerServerCallback('esx_vehicleshop:getCategories', function(categories)
+	ESX.TriggerServerCallback('vpb-vehicleshop:getCategories', function(categories)
 		Categories = categories
 	end)
 
-	ESX.TriggerServerCallback('esx_vehicleshop:getVehicles', function(vehicles)
+	ESX.TriggerServerCallback('vpb-vehicleshop:getVehicles', function(vehicles)
 		Vehicles = vehicles
 	end)
 end
@@ -58,13 +58,13 @@ AddEventHandler('esx:playerLoaded', function(xPlayer)
 	getVehicles()
 end)
 
-RegisterNetEvent('esx_vehicleshop:sendCategories')
-AddEventHandler('esx_vehicleshop:sendCategories', function(categories)
+RegisterNetEvent('vpb-vehicleshop:sendCategories')
+AddEventHandler('vpb-vehicleshop:sendCategories', function(categories)
 	Categories = categories
 end)
 
-RegisterNetEvent('esx_vehicleshop:sendVehicles')
-AddEventHandler('esx_vehicleshop:sendVehicles', function(vehicles)
+RegisterNetEvent('vpb-vehicleshop:sendVehicles')
+AddEventHandler('vpb-vehicleshop:sendVehicles', function(vehicles)
 	Vehicles = vehicles
 end)
 
@@ -88,7 +88,7 @@ function DeleteDisplayVehicleInsideShop()
 end
 
 function ReturnVehicleProvider()
-	ESX.TriggerServerCallback('esx_vehicleshop:getCommercialVehicles', function(vehicles)
+	ESX.TriggerServerCallback('vpb-vehicleshop:getCommercialVehicles', function(vehicles)
 		local elements = {}
 
 		for k,v in ipairs(vehicles) do
@@ -106,7 +106,7 @@ function ReturnVehicleProvider()
 			align    = 'top-left',
 			elements = elements
 		}, function(data, menu)
-			TriggerServerEvent('esx_vehicleshop:returnProvider', data.current.value)
+			TriggerServerEvent('vpb-vehicleshop:returnProvider', data.current.value)
 
 			Citizen.Wait(300)
 			menu.close()
@@ -130,7 +130,7 @@ end
 
 function OpenShopMenu()
 	if #Vehicles == 0 then
-		print('[esx_vehicleshop] [^3ERROR^7] No vehicles found')
+		print('[vpb-vehicleshop] [^3ERROR^7] No vehicles found')
 		return
 	end
 
@@ -157,7 +157,7 @@ function OpenShopMenu()
 		if IsModelInCdimage(GetHashKey(Vehicles[i].model)) then
 			table.insert(vehiclesByCategory[Vehicles[i].category], Vehicles[i])
 		else
-			print(('[esx_vehicleshop] [^3ERROR^7] Vehicle "%s" does not exist'):format(Vehicles[i].model))
+			print(('[vpb-vehicleshop] [^3ERROR^7] Vehicle "%s" does not exist'):format(Vehicles[i].model))
 		end
 	end
 
@@ -210,7 +210,7 @@ function OpenShopMenu()
 		}}, function(data2, menu2)
 			if data2.current.value == 'yes' then
 				if Config.EnablePlayerManagement then
-					ESX.TriggerServerCallback('esx_vehicleshop:buyCarDealerVehicle', function(success)
+					ESX.TriggerServerCallback('vpb-vehicleshop:buyCarDealerVehicle', function(success)
 						if success then
 							IsInShopMenu = false
 							DeleteDisplayVehicleInsideShop()
@@ -234,7 +234,7 @@ function OpenShopMenu()
 				else
 					local generatedPlate = GeneratePlate()
 
-					ESX.TriggerServerCallback('esx_vehicleshop:buyVehicle', function(success)
+					ESX.TriggerServerCallback('vpb-vehicleshop:buyVehicle', function(success)
 						if success then
 							IsInShopMenu = false
 							menu2.close()
@@ -392,7 +392,7 @@ function OpenResellerMenu()
 					local vehicleProps = ESX.Game.GetVehicleProperties(currentDisplayVehicle)
 					vehicleProps.plate = newPlate
 					SetVehicleNumberPlateText(currentDisplayVehicle, newPlate)
-					TriggerServerEvent('esx_vehicleshop:setVehicleOwnedPlayerId', GetPlayerServerId(closestPlayer), vehicleProps, CurrentVehicleData.model, CurrentVehicleData.name)
+					TriggerServerEvent('vpb-vehicleshop:setVehicleOwnedPlayerId', GetPlayerServerId(closestPlayer), vehicleProps, CurrentVehicleData.model, CurrentVehicleData.name)
 					currentDisplayVehicle = nil
 				else
 					ESX.ShowNotification(_U('no_players'))
@@ -420,7 +420,7 @@ function OpenResellerMenu()
 								local newPlate = 'RENT' .. string.upper(ESX.GetRandomString(4))
 								local model = CurrentVehicleData.model
 								SetVehicleNumberPlateText(currentDisplayVehicle, newPlate)
-								TriggerServerEvent('esx_vehicleshop:rentVehicle', model, newPlate, amount, GetPlayerServerId(closestPlayer))
+								TriggerServerEvent('vpb-vehicleshop:rentVehicle', model, newPlate, amount, GetPlayerServerId(closestPlayer))
 								currentDisplayVehicle = nil
 							else
 								ESX.ShowNotification(_U('no_players'))
@@ -446,7 +446,7 @@ function OpenResellerMenu()
 end
 
 function OpenPopVehicleMenu()
-	ESX.TriggerServerCallback('esx_vehicleshop:getCommercialVehicles', function(vehicles)
+	ESX.TriggerServerCallback('vpb-vehicleshop:getCommercialVehicles', function(vehicles)
 		local elements = {}
 
 		for k,v in ipairs(vehicles) do
@@ -483,7 +483,7 @@ function OpenPopVehicleMenu()
 end
 
 function OpenRentedVehiclesMenu()
-	ESX.TriggerServerCallback('esx_vehicleshop:getRentedVehicles', function(vehicles)
+	ESX.TriggerServerCallback('vpb-vehicleshop:getRentedVehicles', function(vehicles)
 		local elements = {}
 
 		for k,v in ipairs(vehicles) do
@@ -521,7 +521,7 @@ function OpenBossActionsMenu()
 			end)
 		elseif data.current.value == 'sold_vehicles' then
 
-			ESX.TriggerServerCallback('esx_vehicleshop:getSoldVehicles', function(customers)
+			ESX.TriggerServerCallback('vpb-vehicleshop:getSoldVehicles', function(customers)
 				local elements = {
 					head = { _U('customer_client'), _U('customer_model'), _U('customer_plate'), _U('customer_soldby'), _U('customer_date') },
 					rows = {}
@@ -558,7 +558,7 @@ function OpenBossActionsMenu()
 end
 
 function OpenGetStocksMenu()
-	ESX.TriggerServerCallback('esx_vehicleshop:getStockItems', function(items)
+	ESX.TriggerServerCallback('vpb-vehicleshop:getStockItems', function(items)
 		local elements = {}
 
 		for i=1, #items, 1 do
@@ -585,7 +585,7 @@ function OpenGetStocksMenu()
 				if count == nil then
 					ESX.ShowNotification(_U('quantity_invalid'))
 				else
-					TriggerServerEvent('esx_vehicleshop:getStockItem', itemName, count)
+					TriggerServerEvent('vpb-vehicleshop:getStockItem', itemName, count)
 					menu2.close()
 					menu.close()
 					OpenGetStocksMenu()
@@ -600,7 +600,7 @@ function OpenGetStocksMenu()
 end
 
 function OpenPutStocksMenu()
-	ESX.TriggerServerCallback('esx_vehicleshop:getPlayerInventory', function(inventory)
+	ESX.TriggerServerCallback('vpb-vehicleshop:getPlayerInventory', function(inventory)
 		local elements = {}
 
 		for i=1, #inventory.items, 1 do
@@ -630,7 +630,7 @@ function OpenPutStocksMenu()
 				if count == nil then
 					ESX.ShowNotification(_U('quantity_invalid'))
 				else
-					TriggerServerEvent('esx_vehicleshop:putStockItems', itemName, count)
+					TriggerServerEvent('vpb-vehicleshop:putStockItems', itemName, count)
 					menu2.close()
 					menu.close()
 					OpenPutStocksMenu()
@@ -644,7 +644,7 @@ function OpenPutStocksMenu()
 	end)
 end
 
-AddEventHandler('esx_vehicleshop:hasEnteredMarker', function(zone)
+AddEventHandler('vpb-vehicleshop:hasEnteredMarker', function(zone)
 	if zone == 'ShopEntering' then
 
 		if Config.EnablePlayerManagement then
@@ -712,7 +712,7 @@ AddEventHandler('esx_vehicleshop:hasEnteredMarker', function(zone)
 	end
 end)
 
-AddEventHandler('esx_vehicleshop:hasExitedMarker', function(zone)
+AddEventHandler('vpb-vehicleshop:hasExitedMarker', function(zone)
 	if not IsInShopMenu then
 		ESX.UI.Menu.CloseAll()
 	end
@@ -789,12 +789,12 @@ Citizen.CreateThread(function()
 		if (isInMarker and not HasAlreadyEnteredMarker) or (isInMarker and LastZone ~= currentZone) then
 			HasAlreadyEnteredMarker, LastZone = true, currentZone
 			LastZone = currentZone
-			TriggerEvent('esx_vehicleshop:hasEnteredMarker', currentZone)
+			TriggerEvent('vpb-vehicleshop:hasEnteredMarker', currentZone)
 		end
 
 		if not isInMarker and HasAlreadyEnteredMarker then
 			HasAlreadyEnteredMarker = false
-			TriggerEvent('esx_vehicleshop:hasExitedMarker', LastZone)
+			TriggerEvent('vpb-vehicleshop:hasExitedMarker', LastZone)
 		end
 
 		if letSleep then
@@ -827,7 +827,7 @@ Citizen.CreateThread(function()
 				elseif CurrentAction == 'reseller_menu' then
 					OpenResellerMenu()
 				elseif CurrentAction == 'give_back_vehicle' then
-					ESX.TriggerServerCallback('esx_vehicleshop:giveBackVehicle', function(isRentedVehicle)
+					ESX.TriggerServerCallback('vpb-vehicleshop:giveBackVehicle', function(isRentedVehicle)
 						if isRentedVehicle then
 							ESX.Game.DeleteVehicle(CurrentActionData.vehicle)
 							ESX.ShowNotification(_U('delivered'))
@@ -836,7 +836,7 @@ Citizen.CreateThread(function()
 						end
 					end, ESX.Math.Trim(GetVehicleNumberPlateText(CurrentActionData.vehicle)))
 				elseif CurrentAction == 'resell_vehicle' then
-					ESX.TriggerServerCallback('esx_vehicleshop:resellVehicle', function(vehicleSold)
+					ESX.TriggerServerCallback('vpb-vehicleshop:resellVehicle', function(vehicleSold)
 						if vehicleSold then
 							ESX.Game.DeleteVehicle(CurrentActionData.vehicle)
 							ESX.ShowNotification(_U('vehicle_sold_for', CurrentActionData.label, ESX.Math.GroupDigits(CurrentActionData.price)))
