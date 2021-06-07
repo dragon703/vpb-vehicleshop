@@ -87,6 +87,24 @@ function DeleteDisplayVehicleInsideShop()
 	end
 end
 
+function DeleteDisplayVehicle(coords)
+	local attempt = 0
+	
+	local displayVeh = ESX.Game.GetVehiclesInArea(coords, 1)
+
+	if displayVeh[1] and DoesEntityExist(displayVeh[1]) then
+		while DoesEntityExist(displayVeh[1]) and not NetworkHasControlOfEntity(displayVeh[1]) and attempt < 100 do
+			Citizen.Wait(100)
+			NetworkRequestControlOfEntity(displayVeh[1])
+			attempt = attempt + 1
+		end
+
+		if DoesEntityExist(displayVeh[1]) and NetworkHasControlOfEntity(displayVeh[1]) then
+			ESX.Game.DeleteVehicle(displayVeh[1])
+		end
+	end
+end
+
 function ReturnVehicleProvider()
 	ESX.TriggerServerCallback('vpb-vehicleshop:getCommercialVehicles', function(vehicles)
 		local elements = {}
@@ -643,6 +661,65 @@ function OpenPutStocksMenu()
 		end)
 	end)
 end
+
+RegisterCommand("dispVeh", function(source, args)
+	if ESX.PlayerData.job.name == 'cardealer' then
+		TriggerEvent('vpb-vehicleshop:spawnVeh', args[1] + 0, args[2])
+	else
+		ESX.ShowNotification('You are not a Cardealer')
+	end
+end)
+
+RegisterNetEvent('vpb-vehicleshop:spawnVeh')
+AddEventHandler('vpb-vehicleshop:spawnVeh', function(location, vName)
+	if location == 1 then
+		print ("Location : " .. location)
+		DeleteDisplayVehicle(Config.Zones.DisplayVehicle1.Pos)
+		ESX.Game.SpawnLocalVehicle(vName, Config.Zones.DisplayVehicle1.Pos, Config.Zones.DisplayVehicle1.Heading, function(vehicle)
+			SetVehicleDoorsLocked(vehicle, 2)
+			SetModelAsNoLongerNeeded(ESX.Game.GetVehicleProperties(vehicle).model)
+		end)
+		print ("Function : Vehicle Spawned at " .. Config.Zones.DisplayVehicle1.Pos )
+	elseif location == 2 then
+		DeleteDisplayVehicle(Config.Zones.DisplayVehicle2.Pos)
+		ESX.Game.SpawnLocalVehicle(vName, Config.Zones.DisplayVehicle2.Pos, Config.Zones.DisplayVehicle2.Heading, function(vehicle)
+			SetVehicleDoorsLocked(vehicle, 2)
+			SetModelAsNoLongerNeeded(ESX.Game.GetVehicleProperties(vehicle).model)
+		end)
+	elseif location == 3 then
+		DeleteDisplayVehicle(Config.Zones.DisplayVehicle3.Pos)
+		ESX.Game.SpawnLocalVehicle(vName, Config.Zones.DisplayVehicle3.Pos, Config.Zones.DisplayVehicle3.Heading, function(vehicle)
+			SetVehicleDoorsLocked(vehicle, 2)
+			SetModelAsNoLongerNeeded(ESX.Game.GetVehicleProperties(vehicle).model)
+		end)
+	elseif location == 4 then
+		DeleteDisplayVehicle(Config.Zones.DisplayVehicle4.Pos)
+		ESX.Game.SpawnLocalVehicle(vName, Config.Zones.DisplayVehicle4.Pos, Config.Zones.DisplayVehicle4.Heading, function(vehicle)
+			SetVehicleDoorsLocked(vehicle, 2)
+			SetModelAsNoLongerNeeded(ESX.Game.GetVehicleProperties(vehicle).model)
+		end)
+	elseif location == 5 then
+		DeleteDisplayVehicle(Config.Zones.DisplayVehicle5.Pos)
+		ESX.Game.SpawnLocalVehicle(vName, Config.Zones.DisplayVehicle5.Pos, Config.Zones.DisplayVehicle5.Heading, function(vehicle)
+			SetVehicleDoorsLocked(vehicle, 2)
+			SetModelAsNoLongerNeeded(ESX.Game.GetVehicleProperties(vehicle).model)
+		end)
+	elseif location == 6 then
+		DeleteDisplayVehicle(Config.Zones.DisplayVehicle6.Pos)
+		ESX.Game.SpawnLocalVehicle(vName, Config.Zones.DisplayVehicle6.Pos, Config.Zones.DisplayVehicle6.Heading, function(vehicle)
+			SetVehicleDoorsLocked(vehicle, 2)
+			SetModelAsNoLongerNeeded(ESX.Game.GetVehicleProperties(vehicle).model)
+		end)
+	elseif location == 7 then
+		DeleteDisplayVehicle(Config.Zones.DisplayTruck.Pos)
+		ESX.Game.SpawnLocalVehicle(vName, Config.Zones.DisplayTruck.Pos, Config.Zones.DisplayTruck.Heading, function(vehicle)
+			SetVehicleDoorsLocked(vehicle, 2)
+			SetModelAsNoLongerNeeded(ESX.Game.GetVehicleProperties(vehicle).model)
+		end)
+	else
+		print ("Location: " .. location .. " and VehicleName: " .. vName)
+	end
+end)
 
 AddEventHandler('vpb-vehicleshop:hasEnteredMarker', function(zone)
 	if zone == 'ShopEntering' then

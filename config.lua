@@ -23,9 +23,9 @@ Config.Zones = {
 	},
 
 	ShopInside = {
-		Pos     = vector3(-47.5, -1097.2, 25.4),
+		Pos     = vector3(-31.4, -1090.3, 26.0),
 		Size    = {x = 1.5, y = 1.5, z = 1.0},
-		Heading = -20.0,
+		Heading = 323.7,
 		Type    = -1
 	},
 
@@ -55,38 +55,45 @@ Config.Zones = {
 	},
 	
 	DisplayVehicle1 = {
-		Pos		= vector3(0.0, 0.0, 0.0),
-		Heading	= 0.0
+		Pos		= vector3(-45.3, -1103.3, 25.7),
+		Size  = {x = 0.0, y = 0.0, z = 0.0},
+		Heading	= 300.0
 	},
 	
 	DisplayVehicle2 = {
-		Pos		= vector3(0.0, 0.0, 0.0),
-		Heading	= 0.0
+		Pos		= vector3(-48.2, -1101.7, 26.0),
+		Size  = {x = 0.0, y = 0.0, z = 0.0},
+		Heading	= 300.0
 	},
 	
 	DisplayVehicle3 = {
-		Pos		= vector3(0.0, 0.0, 0.0),
-		Heading	= 0.0
+		Pos		= vector3(-51.9, -1094.5, 26.0),
+		Size  = {x = 0.0, y = 0.0, z = 0.0},
+		Heading	= 160.0
 	},
 	
 	DisplayVehicle4 = {
-		Pos		= vector3(0.0, 0.0, 0.0),
-		Heading	= 0.0
+		Pos		= vector3(-47.0, -1093.6, 26.0),
+		Size  = {x = 0.0, y = 0.0, z = 0.0},
+		Heading	= 190.0
 	},
 	
 	DisplayVehicle5 = {
-		Pos		= vector3(0.0, 0.0, 0.0),
-		Heading	= 0.0
+		Pos		= vector3(-43.7, -1094.3, 26.0),
+		Size  = {x = 0.0, y = 0.0, z = 0.0},
+		Heading	= 190.0
 	},
 	
 	DisplayVehicle6 = {
-		Pos		= vector3(0.0, 0.0, 0.0),
-		Heading	= 0.0
+		Pos		= vector3(-39.5, -1096.2, 26.0),
+		Size  = {x = 0.0, y = 0.0, z = 0.0},
+		Heading	= 190.0
 	},
 	
 	DisplayTruck = {
-		Pos		= vector3(0.0, 0.0, 0.0),
-		Heading	= 0.0
+		Pos		= vector3(-13.9, -1105.8, 26.0),
+		Size  = {x = 0.0, y = 0.0, z = 0.0},
+		Heading	= 160.0
 	}
 
 }
